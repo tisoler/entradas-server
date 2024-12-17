@@ -1,7 +1,9 @@
 import express, { Express, Router } from 'express'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import { RouteCreateEntrada, RouteGetEntradas, RouteUpdateEntrada } from './routes/entrada'
+import { RutaCreateEntrada, RutaGetEntradas, RutaUpdateEntrada } from './routes/entrada'
+import { RutaAutenticar } from './routes/usuario'
+import verificarToken from './middleware/verificadorToken'
 
 dotenv.config()
 
@@ -22,10 +24,12 @@ const corsOptions = {
 
 // @ts-ignore
 app.use(cors(corsOptions))
-app.use(apiRouter)
-apiRouter.get('/entrada', RouteGetEntradas)
-apiRouter.put('/entrada', RouteUpdateEntrada)
-apiRouter.post('/entrada', RouteCreateEntrada)
+app.use('/api', apiRouter)
+
+apiRouter.post('/autenticar', RutaAutenticar)
+apiRouter.get('/entrada', verificarToken, RutaGetEntradas)
+apiRouter.put('/entrada', verificarToken, RutaUpdateEntrada)
+apiRouter.post('/entrada', verificarToken, RutaCreateEntrada)
 
 const port = API_PORT || 3025
 app.listen(port, () => {

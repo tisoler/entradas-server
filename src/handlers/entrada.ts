@@ -1,4 +1,5 @@
 import { Entrada, initEntrada } from '../models/entrada'
+import { DatosUsuario } from './usuario'
 
 export type EntradaPayload = {
 	id: number,
@@ -44,7 +45,7 @@ export const UpdateEntrada = async (payload: EntradaPayload): Promise<Entrada> =
 	}
 }
 
-export const CreateEntrada = async (payload: EntradaPayload): Promise<Entrada> => {
+export const CreateEntrada = async (payload: EntradaPayload, usuario: DatosUsuario): Promise<Entrada> => {
 	try {
     if (!payload.dni) throw new Error('DNI no ingresado')
 
@@ -56,6 +57,7 @@ export const CreateEntrada = async (payload: EntradaPayload): Promise<Entrada> =
       dni: payload.dni,
       pagada: payload.pagada || false,
       verificada: false,
+			idUsuario: usuario.idUsuario,
     })
     
     const nuevaEntrada = await newEntrada.save()

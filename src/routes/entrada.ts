@@ -1,7 +1,9 @@
 import { Request, Response } from 'express'
 import { CreateEntrada, EntradaPayload, GetEntradas, UpdateEntrada } from '../handlers/entrada'
+import { RequestConUsuario } from '../middleware/verificadorToken'
+import { DatosUsuario } from '../handlers/usuario'
 
-export const RouteGetEntradas = async (req: Request, res: Response) => {
+export const RutaGetEntradas = async (req: Request, res: Response) => {
   try {
     const entradas = await GetEntradas()
     res.status(200).json(entradas)
@@ -11,7 +13,7 @@ export const RouteGetEntradas = async (req: Request, res: Response) => {
   }
 }
 
-export const RouteUpdateEntrada = async (req: Request, res: Response) => {
+export const RutaUpdateEntrada = async (req: Request, res: Response) => {
   try {
     if (!req.body) {
       res.sendStatus(400)
@@ -25,13 +27,13 @@ export const RouteUpdateEntrada = async (req: Request, res: Response) => {
   }
 }
 
-export const RouteCreateEntrada = async (req: Request, res: Response) => {
+export const RutaCreateEntrada = async (req: RequestConUsuario, res: Response) => {
   try {
     if (!req.body) {
       res.sendStatus(400)
       return
     }
-    const entrada = await CreateEntrada(req.body as EntradaPayload)
+    const entrada = await CreateEntrada(req.body as EntradaPayload, req.usuario as DatosUsuario)
     res.status(200).json(entrada)
   } catch(e: any) {
     console.log(e)

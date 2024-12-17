@@ -16,6 +16,7 @@ export class Entrada extends Model<
   declare dni: number
   declare pagada: boolean
   declare verificada: boolean
+  declare idUsuario: number
 }
 
 export const initEntrada = async () => {
@@ -42,6 +43,10 @@ export const initEntrada = async () => {
 			},
       verificada: {
 				type: new DataTypes.BOOLEAN,
+				allowNull: false
+			},
+      idUsuario:  {
+				type: new DataTypes.INTEGER,
 				allowNull: false
 			},
 		},
